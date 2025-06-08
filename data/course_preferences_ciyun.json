@@ -1,0 +1,606 @@
+{
+    "selected_only_word_cloud": [
+        {
+            "text": "应用",
+            "size": 124,
+            "weight": 0.1246,
+            "frequency": 858
+        },
+        {
+            "text": "培训",
+            "size": 92,
+            "weight": 0.0929,
+            "frequency": 500
+        },
+        {
+            "text": "编程",
+            "size": 91,
+            "weight": 0.0915,
+            "frequency": 365
+        },
+        {
+            "text": "科研机构",
+            "size": 71,
+            "weight": 0.0712,
+            "frequency": 317
+        },
+        {
+            "text": "创新",
+            "size": 66,
+            "weight": 0.0664,
+            "frequency": 454
+        },
+        {
+            "text": "原理",
+            "size": 61,
+            "weight": 0.0618,
+            "frequency": 372
+        },
+        {
+            "text": "微课",
+            "size": 59,
+            "weight": 0.0594,
+            "frequency": 179
+        },
+        {
+            "text": "光谱",
+            "size": 54,
+            "weight": 0.055,
+            "frequency": 265
+        },
+        {
+            "text": "工作",
+            "size": 53,
+            "weight": 0.0539,
+            "frequency": 503
+        },
+        {
+            "text": "学习",
+            "size": 53,
+            "weight": 0.0531,
+            "frequency": 361
+        },
+        {
+            "text": "发展",
+            "size": 52,
+            "weight": 0.0527,
+            "frequency": 579
+        },
+        {
+            "text": "科学",
+            "size": 52,
+            "weight": 0.0523,
+            "frequency": 368
+        },
+        {
+            "text": "精神",
+            "size": 49,
+            "weight": 0.05,
+            "frequency": 349
+        },
+        {
+            "text": "简介",
+            "size": 49,
+            "weight": 0.0493,
+            "frequency": 216
+        },
+        {
+            "text": "技术",
+            "size": 47,
+            "weight": 0.047,
+            "frequency": 391
+        },
+        {
+            "text": "开展",
+            "size": 44,
+            "weight": 0.045,
+            "frequency": 292
+        },
+        {
+            "text": "介绍",
+            "size": 43,
+            "weight": 0.0437,
+            "frequency": 310
+        },
+        {
+            "text": "解读",
+            "size": 40,
+            "weight": 0.04,
+            "frequency": 206
+        },
+        {
+            "text": "驱动",
+            "size": 37,
+            "weight": 0.0376,
+            "frequency": 209
+        },
+        {
+            "text": "研究",
+            "size": 37,
+            "weight": 0.0371,
+            "frequency": 337
+        },
+        {
+            "text": "世界",
+            "size": 35,
+            "weight": 0.0352,
+            "frequency": 316
+        },
+        {
+            "text": "管理",
+            "size": 33,
+            "weight": 0.0337,
+            "frequency": 283
+        },
+        {
+            "text": "生物",
+            "size": 33,
+            "weight": 0.0336,
+            "frequency": 223
+        },
+        {
+            "text": "通识",
+            "size": 32,
+            "weight": 0.0323,
+            "frequency": 106
+        },
+        {
+            "text": "巡天",
+            "size": 31,
+            "weight": 0.0313,
+            "frequency": 109
+        },
+        {
+            "text": "环境",
+            "size": 30,
+            "weight": 0.0306,
+            "frequency": 232
+        },
+        {
+            "text": "自信",
+            "size": 30,
+            "weight": 0.0302,
+            "frequency": 152
+        },
+        {
+            "text": "正念",
+            "size": 30,
+            "weight": 0.0301,
+            "frequency": 96
+        },
+        {
+            "text": "大脑",
+            "size": 29,
+            "weight": 0.0293,
+            "frequency": 145
+        },
+        {
+            "text": "沟通",
+            "size": 29,
+            "weight": 0.029,
+            "frequency": 164
+        },
+        {
+            "text": "设计",
+            "size": 29,
+            "weight": 0.029,
+            "frequency": 206
+        },
+        {
+            "text": "数据",
+            "size": 28,
+            "weight": 0.029,
+            "frequency": 238
+        },
+        {
+            "text": "贯彻",
+            "size": 28,
+            "weight": 0.0289,
+            "frequency": 143
+        },
+        {
+            "text": "X射线",
+            "size": 28,
+            "weight": 0.0286,
+            "frequency": 94
+        },
+        {
+            "text": "地球化学",
+            "size": 28,
+            "weight": 0.0284,
+            "frequency": 124
+        },
+        {
+            "text": "信息化",
+            "size": 28,
+            "weight": 0.0281,
+            "frequency": 142
+        },
+        {
+            "text": "科技",
+            "size": 27,
+            "weight": 0.0275,
+            "frequency": 185
+        },
+        {
+            "text": "文化",
+            "size": 27,
+            "weight": 0.0275,
+            "frequency": 212
+        },
+        {
+            "text": "同位素",
+            "size": 27,
+            "weight": 0.0272,
+            "frequency": 126
+        },
+        {
+            "text": "对话",
+            "size": 26,
+            "weight": 0.0268,
+            "frequency": 141
+        },
+        {
+            "text": "领会",
+            "size": 26,
+            "weight": 0.0266,
+            "frequency": 116
+        },
+        {
+            "text": "基础知识",
+            "size": 26,
+            "weight": 0.0263,
+            "frequency": 101
+        },
+        {
+            "text": "生物进化",
+            "size": 25,
+            "weight": 0.0259,
+            "frequency": 106
+        },
+        {
+            "text": "化学",
+            "size": 25,
+            "weight": 0.0253,
+            "frequency": 162
+        },
+        {
+            "text": "全面",
+            "size": 25,
+            "weight": 0.0252,
+            "frequency": 176
+        },
+        {
+            "text": "基础",
+            "size": 24,
+            "weight": 0.0249,
+            "frequency": 205
+        },
+        {
+            "text": "党规",
+            "size": 24,
+            "weight": 0.0241,
+            "frequency": 74
+        },
+        {
+            "text": "建设",
+            "size": 24,
+            "weight": 0.024,
+            "frequency": 192
+        },
+        {
+            "text": "圆桌",
+            "size": 23,
+            "weight": 0.024,
+            "frequency": 98
+        },
+        {
+            "text": "时代",
+            "size": 23,
+            "weight": 0.0232,
+            "frequency": 165
+        }
+    ],
+    "learned_word_cloud": [
+        {
+            "text": "培训",
+            "size": 98,
+            "weight": 0.0981,
+            "frequency": 9505
+        },
+        {
+            "text": "应用",
+            "size": 83,
+            "weight": 0.0832,
+            "frequency": 10314
+        },
+        {
+            "text": "创新",
+            "size": 82,
+            "weight": 0.0826,
+            "frequency": 10168
+        },
+        {
+            "text": "精神",
+            "size": 81,
+            "weight": 0.0813,
+            "frequency": 10220
+        },
+        {
+            "text": "领会",
+            "size": 76,
+            "weight": 0.0763,
+            "frequency": 5995
+        },
+        {
+            "text": "学习",
+            "size": 72,
+            "weight": 0.0722,
+            "frequency": 8834
+        },
+        {
+            "text": "技术",
+            "size": 51,
+            "weight": 0.0513,
+            "frequency": 7684
+        },
+        {
+            "text": "科学",
+            "size": 49,
+            "weight": 0.0498,
+            "frequency": 6307
+        },
+        {
+            "text": "通识",
+            "size": 49,
+            "weight": 0.0498,
+            "frequency": 2941
+        },
+        {
+            "text": "量子",
+            "size": 48,
+            "weight": 0.0488,
+            "frequency": 4005
+        },
+        {
+            "text": "数据",
+            "size": 48,
+            "weight": 0.0482,
+            "frequency": 7125
+        },
+        {
+            "text": "管理",
+            "size": 47,
+            "weight": 0.0471,
+            "frequency": 7117
+        },
+        {
+            "text": "时代",
+            "size": 45,
+            "weight": 0.0456,
+            "frequency": 5857
+        },
+        {
+            "text": "设计",
+            "size": 43,
+            "weight": 0.043,
+            "frequency": 5500
+        },
+        {
+            "text": "发展",
+            "size": 42,
+            "weight": 0.0425,
+            "frequency": 8407
+        },
+        {
+            "text": "环境",
+            "size": 41,
+            "weight": 0.0417,
+            "frequency": 5686
+        },
+        {
+            "text": "生物进化",
+            "size": 39,
+            "weight": 0.0399,
+            "frequency": 2941
+        },
+        {
+            "text": "建设",
+            "size": 37,
+            "weight": 0.0373,
+            "frequency": 5362
+        },
+        {
+            "text": "科技",
+            "size": 35,
+            "weight": 0.0352,
+            "frequency": 4262
+        },
+        {
+            "text": "贯彻",
+            "size": 34,
+            "weight": 0.0349,
+            "frequency": 3110
+        },
+        {
+            "text": "编程",
+            "size": 34,
+            "weight": 0.0345,
+            "frequency": 2476
+        },
+        {
+            "text": "信息技术",
+            "size": 34,
+            "weight": 0.0344,
+            "frequency": 2943
+        },
+        {
+            "text": "天工",
+            "size": 33,
+            "weight": 0.0337,
+            "frequency": 2151
+        },
+        {
+            "text": "研究",
+            "size": 33,
+            "weight": 0.0332,
+            "frequency": 5423
+        },
+        {
+            "text": "智能",
+            "size": 31,
+            "weight": 0.0319,
+            "frequency": 3146
+        },
+        {
+            "text": "增强",
+            "size": 31,
+            "weight": 0.0315,
+            "frequency": 3835
+        },
+        {
+            "text": "简介",
+            "size": 31,
+            "weight": 0.0311,
+            "frequency": 2451
+        },
+        {
+            "text": "生态",
+            "size": 30,
+            "weight": 0.031,
+            "frequency": 2957
+        },
+        {
+            "text": "基础知识",
+            "size": 30,
+            "weight": 0.0305,
+            "frequency": 2113
+        },
+        {
+            "text": "思想",
+            "size": 30,
+            "weight": 0.0302,
+            "frequency": 3814
+        },
+        {
+            "text": "现状",
+            "size": 29,
+            "weight": 0.0298,
+            "frequency": 2898
+        },
+        {
+            "text": "化学",
+            "size": 28,
+            "weight": 0.0288,
+            "frequency": 3320
+        },
+        {
+            "text": "光学",
+            "size": 28,
+            "weight": 0.028,
+            "frequency": 2641
+        },
+        {
+            "text": "党性",
+            "size": 27,
+            "weight": 0.0274,
+            "frequency": 1925
+        },
+        {
+            "text": "解读",
+            "size": 25,
+            "weight": 0.0255,
+            "frequency": 2365
+        },
+        {
+            "text": "思维",
+            "size": 25,
+            "weight": 0.0252,
+            "frequency": 2426
+        },
+        {
+            "text": "原理",
+            "size": 24,
+            "weight": 0.0249,
+            "frequency": 2703
+        },
+        {
+            "text": "特色",
+            "size": 24,
+            "weight": 0.0242,
+            "frequency": 2616
+        },
+        {
+            "text": "激光器",
+            "size": 23,
+            "weight": 0.024,
+            "frequency": 1797
+        },
+        {
+            "text": "晶格",
+            "size": 23,
+            "weight": 0.0239,
+            "frequency": 1737
+        },
+        {
+            "text": "研究进展",
+            "size": 23,
+            "weight": 0.0232,
+            "frequency": 1403
+        },
+        {
+            "text": "社会主义",
+            "size": 23,
+            "weight": 0.0232,
+            "frequency": 2570
+        },
+        {
+            "text": "聚焦",
+            "size": 23,
+            "weight": 0.0232,
+            "frequency": 1972
+        },
+        {
+            "text": "地理信息",
+            "size": 22,
+            "weight": 0.023,
+            "frequency": 1229
+        },
+        {
+            "text": "基础",
+            "size": 22,
+            "weight": 0.0223,
+            "frequency": 3311
+        },
+        {
+            "text": "成像",
+            "size": 22,
+            "weight": 0.0223,
+            "frequency": 1803
+        },
+        {
+            "text": "系列讲座",
+            "size": 22,
+            "weight": 0.0221,
+            "frequency": 1124
+        },
+        {
+            "text": "人工智能",
+            "size": 22,
+            "weight": 0.0221,
+            "frequency": 1651
+        },
+        {
+            "text": "原子",
+            "size": 21,
+            "weight": 0.0214,
+            "frequency": 2113
+        },
+        {
+            "text": "光谱",
+            "size": 21,
+            "weight": 0.0213,
+            "frequency": 1849
+        }
+    ]
+}

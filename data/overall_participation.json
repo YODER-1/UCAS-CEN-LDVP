@@ -1,0 +1,11 @@
+{
+    "total_course": 1944,
+    "total_selected_users": 10360,
+    "actual_learning_users": 10245,
+    "selected_not_learned_users": 6388,
+    "learning_conversion_rate": 0.9889,
+    "total_selected_courses_count": 219472,
+    "total_learning_duration_hours": 212382.74,
+    "avg_courses_per_total_learner": 21.18,
+    "avg_learning_duration_per_actual_learner": 20.73
+}

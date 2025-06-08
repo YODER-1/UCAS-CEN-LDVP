@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>科研人员在线学习数据 - 课程分析</title>
+    <link rel="icon" type="image/png" href="../../favicon.png">
+    <script src="../../lib/d3.v7.min.js"></script>
+    <script src="../../lib/d3.layout.cloud.min.js"></script>
+    <link rel="stylesheet" href="../../style/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #e3f2fd;
+        }
+        
+        .navbar {
+            background-color: #0288d1;
+            padding: 20px 40px;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 16px;
+        }
+        
+        .navbar>div:first-child {
+            font-size: 20px;
+            font-weight: bold;
+        }
+        
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 16px;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background-color 0.2s;
+        }
+        
+        .navbar a:hover {
+            text-decoration: none;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        /* 当前页面导航高亮样式 */
+        
+        .navbar a.active {
+            background-color: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            font-weight: bold;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+        
+        .chart-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            overflow: visible;
+            /* 允许内容溢出 */
+            animation: slideInUp 0.6s ease-out;
+        }
+        
+        .chart-title {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .chart-row {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .chart-col {
+            flex: 1;
+        }
+        
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .kpi-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: transform 0.2s;
+            animation: slideInUp 0.5s ease-out;
+        }
+        
+        .kpi-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .kpi-value {
+            font-size: 28px;
+            font-weight: bold;
+            color: #0288d1;
+            margin: 10px 0;
+        }
+        
+        .kpi-label {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .kpi-description {
+            font-size: 12px;
+            color: #888;
+            margin-top: 8px;
+            line-height: 1.4;
+            padding: 0 10px;
+        }
+        
+        .tooltip {
+            position: absolute;
+            padding: 8px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            border-radius: 4px;
+            font-size: 12px;
+            pointer-events: none;
+        }
+        
+        .word-cloud text:hover {
+            fill: #0288d1;
+        }
+        
+        .axis-label {
+            font-size: 12px;
+            fill: #666;
+        }
+        
+        .legend {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 10px;
+            animation: fadeIn 1s ease-out;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .legend-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 2px;
+        }
+        
+        .bar {
+            fill: #0288d1;
+            transition: fill 0.3s;
+            animation: growHeight 0.8s ease-out;
+        }
+        
+        .bar:hover {
+            fill: #026aa7;
+        }
+        
+        .line {
+            fill: none;
+            stroke: #f44336;
+            stroke-width: 2;
+        }
+        
+        .dot {
+            fill: #0288d1;
+            transition: r 0.3s;
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        .dot:hover {
+            r: 8;
+        }
+        /* 调整图表大小的样式 */
+        
+        .large-chart {
+            height: 500px !important;
+        }
+        
+        .extra-large-chart {
+            height: 600px !important;
+        }
+        /* 调整坐标轴文本样式 */
+        
+        .axis-text {
+            font-size: 12px;
+            fill: #666;
+        }
+        
+        .rotated-text {
+            text-anchor: end;
+            transform-origin: left;
+        }
+        /* 添加图表动画相关样式 */
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        
+        @keyframes slideInUp {
+            from {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        @keyframes growHeight {
+            from {
+                transform: scaleY(0);
+                transform-origin: bottom;
+            }
+            to {
+                transform: scaleY(1);
+                transform-origin: bottom;
+            }
+        }
+        
+        @keyframes slideInLeft {
+            from {
+                transform: translateX(-20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        /* 图表容器动画 */
+        
+        .chart-container {
+            animation: slideInUp 0.6s ease-out;
+        }
+        
+        .chart-container svg {
+            animation: fadeIn 0.8s ease-out;
+        }
+        /* 柱状图动画 */
+        
+        .bar {
+            fill: #0288d1;
+            transition: fill 0.3s;
+            animation: growHeight 0.8s ease-out;
+        }
+        
+        .bar:hover {
+            fill: #026aa7;
+        }
+        /* 折线图动画 */
+        
+        .line {
+            fill: none;
+            stroke: #f44336;
+            stroke-width: 2;
+        }
+        /* 散点图动画 */
+        
+        .dot {
+            fill: #0288d1;
+            transition: r 0.3s;
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        .dot:hover {
+            r: 8;
+        }
+        /* 词云动画 */
+        
+        .word-cloud text {
+            animation: fadeIn 1s ease-out;
+            transition: all 0.3s ease;
+        }
+        
+        .word-cloud text:hover {
+            fill: #0288d1;
+        }
+        /* KPI卡片动画 */
+        
+        .kpi-card {
+            animation: slideInUp 0.5s ease-out;
+        }
+        /* 坐标轴动画 */
+        
+        .axis {
+            animation: slideInLeft 0.6s ease-out;
+        }
+        /* 图例动画 */
+        
+        .legend {
+            animation: fadeIn 1s ease-out;
+        }
+        /* 加载动画 */
+        
+        .loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: none;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+        
+        .loading.active {
+            display: block;
+            animation: fadeIn 0.3s ease-out;
+        }
+        
+        .chart-description {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 15px;
+            line-height: 1.5;
+            text-align: left;
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 6px;
+            border-left: 4px solid #0288d1;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="navbar">
+        <div><a href="../../index.html" style="text-decoration: none; color: white;font-size: 20px;font-weight: bold;">首   页</a></div>
+        <div>
+            <a href="../dashboard/dashboard.html">数据总览</a>
+            <a href="../demographic/demographic.html">人口统计分析</a>
+            <a href="../course/course.html">课程分析</a>
+            <a href="../time/time.html">时间行为分析</a>
+            <a href="../quality/quality.html">质量与效率分析</a>
+            <a href="../clustering/clustering.html">聚类分析</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="kpi-grid">
+            <div class="kpi-card">
+                <div class="kpi-value" id="high-completion-rate">-</div>
+                <div class="kpi-label">高完成课程占比</div>
+                <div class="kpi-description">衡量课程学习质量，高完成度课程比例越高表示学习效果越好</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-value" id="repeat-learning-rate">-</div>
+                <div class="kpi-label">重复学习率</div>
+                <div class="kpi-description">反映科研人员对同一课程的重复学习需求，体现课程价值和学习深度</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-value" id="conversion-rate">-</div>
+                <div class="kpi-label">选课学习转化率</div>
+                <div class="kpi-description">表示科研人员参与在线学习的积极性和平台吸引力</div>
+            </div>
+        </div>
+
+        <div class="chart-container">
+            <div class="chart-title">最受欢迎课程（Top 10）</div>
+            <div class="chart-description">
+                按学习人数排序的最受欢迎课程Top 10，柱状图长度代表学习人数。
+                帮助了解科研人员的学习偏好和热门课程类型，为课程规划提供参考。
+            </div>
+            <svg id="popular-courses-chart" width="100%" height="600"></svg>
+        </div>
+
+        <div class="chart-container">
+            <div class="chart-title">课程平均完成度排名（Top 10）</div>
+            <div class="chart-description">
+                按完成度排序的高质量课程Top 10，展示学习效果最佳的课程。
+                高完成度的课程通常具有更好的内容质量和用户体验，值得推广。
+            </div>
+            <svg id="completion-rank-chart" width="100%" height="600"></svg>
+        </div>
+
+        <div class="chart-container">
+            <div class="chart-title">课程学习人数与平均完成度关系</div>
+            <div class="chart-description">
+                双轴图表：蓝色柱状图为学习人数，红色折线为平均完成度。
+                分析热门课程与优质课程的关系，发现受欢迎且完成度高的优秀课程。
+            </div>
+            <svg id="dual-axis-chart" width="100%" height="600"></svg>
+        </div>
+
+        <div class="chart-row">
+            <div class="chart-col">
+                <div class="chart-container">
+                    <div class="chart-title">仅选学未学课程词云</div>
+                    <div class="chart-description">
+                        展示选课但未实际学习的课程关键词，字体大小反映选择频次。
+                        帮助识别吸引力不足或存在问题的课程类型，为改进提供方向。
+                    </div>
+                    <svg id="selected-only-word-cloud" width="100%" height="400"></svg>
+                </div>
+            </div>
+            <div class="chart-col">
+                <div class="chart-container">
+                    <div class="chart-title">实际学习课程词云</div>
+                    <div class="chart-description">
+                        展示实际被学习的课程关键词，字体大小反映学习热度。
+                        反映科研人员真实的学习需求和兴趣方向，指导课程内容优化。
+                    </div>
+                    <svg id="learned-word-cloud" width="100%" height="400"></svg>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="course.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 设置当前页面导航高亮
+            const navLinks = document.querySelectorAll('.navbar a');
+            navLinks.forEach(link => {
+                const linkHref = link.getAttribute('href');
+                if (linkHref && linkHref.includes('course.html')) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

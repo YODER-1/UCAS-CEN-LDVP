@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>科研人员在线学习数据 - 数据总览</title>
+    <link rel="icon" type="image/png" href="../../favicon.png">
+    <script src="../../lib/d3.v7.min.js"></script>
+    <link rel="stylesheet" href="../../style/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #e3f2fd;
+        }
+        
+        .navbar {
+            background-color: #0288d1;
+            padding: 20px 40px;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 16px;
+        }
+        
+        .navbar>div:first-child {
+            font-size: 20px;
+            font-weight: bold;
+        }
+        
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 16px;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background-color 0.2s;
+        }
+        
+        .navbar a:hover {
+            text-decoration: none;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        /* 当前页面导航高亮样式 */
+        
+        .navbar a.active {
+            background-color: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            font-weight: bold;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+        
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .kpi-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: transform 0.2s;
+            animation: slideInUp 0.6s ease-out;
+        }
+        
+        .kpi-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .kpi-value {
+            font-size: 28px;
+            font-weight: bold;
+            color: #0288d1;
+            margin: 10px 0;
+            animation: countUp 0.8s ease-out;
+        }
+        
+        .kpi-label {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .kpi-description {
+            font-size: 12px;
+            color: #888;
+            margin-top: 8px;
+            line-height: 1.4;
+            padding: 0 10px;
+        }
+        
+        .kpi-card1 {
+            background: #e3f2fd;
+        }
+        
+        .chart-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            animation: slideInUp 0.8s ease-out;
+        }
+        
+        .chart-title {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .progress-ring {
+            width: 60px;
+            height: 60px;
+            margin: 10px auto;
+        }
+        
+        .tooltip {
+            position: absolute;
+            padding: 8px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            border-radius: 4px;
+            font-size: 12px;
+            pointer-events: none;
+        }
+        /* 添加动画效果 */
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        
+        @keyframes slideInUp {
+            from {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        @keyframes slideInLeft {
+            from {
+                transform: translateX(-20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        @keyframes growHeight {
+            from {
+                transform: scaleY(0);
+                transform-origin: bottom;
+            }
+            to {
+                transform: scaleY(1);
+                transform-origin: bottom;
+            }
+        }
+        
+        @keyframes countUp {
+            from {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+        /* 柱状图动画 */
+        
+        .bar {
+            fill: #0288d1;
+            transition: fill 0.3s;
+        }
+        
+        .bar:hover {
+            fill: #026aa7;
+        }
+        /* 坐标轴动画 */
+        
+        .axis {
+            animation: slideInLeft 0.6s ease-out;
+        }
+        /* 延迟动画效果 */
+        
+        .kpi-card:nth-child(1) {
+            animation-delay: 0s;
+        }
+        
+        .kpi-card:nth-child(2) {
+            animation-delay: 0.1s;
+        }
+        
+        .kpi-card:nth-child(3) {
+            animation-delay: 0.2s;
+        }
+        
+        .kpi-card:nth-child(4) {
+            animation-delay: 0.3s;
+        }
+        
+        .kpi-card:nth-child(5) {
+            animation-delay: 0.4s;
+        }
+        
+        .kpi-card:nth-child(6) {
+            animation-delay: 0.5s;
+        }
+        
+        .chart-description {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 15px;
+            line-height: 1.5;
+            text-align: left;
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 6px;
+            border-left: 4px solid #0288d1;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="navbar">
+        <div><a href="../../index.html" style="text-decoration: none; color: white;font-size: 20px;font-weight: bold;">首   页</a></div>
+        <div>
+            <a href="../dashboard/dashboard.html">数据总览</a>
+            <a href="../demographic/demographic.html">人口统计分析</a>
+            <a href="../course/course.html">课程分析</a>
+            <a href="../time/time.html">时间行为分析</a>
+            <a href="../quality/quality.html">质量与效率分析</a>
+            <a href="../clustering/clustering.html">聚类分析</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="kpi-grid">
+            <div class="kpi-card">
+                <div class="kpi-value" id="total-course">-</div>
+                <div class="kpi-label">总设置课程数量</div>
+                <div class="kpi-description">平台共设置1944门课程，为科研人员提供丰富的学习资源选择</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-value" id="total-courses">-</div>
+                <div class="kpi-label">总选课数量</div>
+                <div class="kpi-description">累计选课记录数21.9万次，包含科研人员的重复选课，反映学习需求总量</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-value" id="total-duration">-</div>
+                <div class="kpi-label">总学习时长（小时）</div>
+                <div class="kpi-description">全平台累计学习时长21.2万小时，体现科研人员的整体学习投入</div>
+            </div>
+
+            <div class="kpi-card">
+                <div class="kpi-value" id="conversion-rate-value">-</div>
+                <div class="kpi-label">学习转化率</div>
+                <div class="kpi-description">选课后实际进行学习的比例达98.9%，显示极高的学习执行力</div>
+            </div>
+            <div class="kpi-card1">
+
+            </div>
+
+            <div class="kpi-card">
+                <div class="kpi-value" id="avg-courses">-</div>
+                <div class="kpi-label">人均选课数量</div>
+                <div class="kpi-description">每位科研人员平均选择21.2门课程，体现广泛的学习兴趣</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-value" id="avg-duration">-</div>
+                <div class="kpi-label">人均学习时长（小时）</div>
+                <div class="kpi-description">实际学习人员平均投入20.7小时，反映深度学习参与度</div>
+            </div>
+        </div>
+        <div class="kpi-card1">
+
+        </div>
+        <div class="chart-container">
+            <div class="chart-title">科研人员群体规模比较</div>
+            <div class="chart-description">
+                该图表对比了三类科研人员群体：总选课人数(10360)、实际学习人数(10245)、选课未学习人数(6388)。
+                数据显示98.9%的选课人员都实际参与了学习，说明科研人员的学习执行力很强，但仍有部分人员选课后未能完成学习。
+            </div>
+            <svg id="bar-chart" width="100%" height="400"></svg>
+        </div>
+
+
+    </div>
+    <script src="dashboard.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 设置当前页面导航高亮
+            const navLinks = document.querySelectorAll('.navbar a');
+            navLinks.forEach(link => {
+                const linkHref = link.getAttribute('href');
+                if (linkHref && linkHref.includes('dashboard.html')) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

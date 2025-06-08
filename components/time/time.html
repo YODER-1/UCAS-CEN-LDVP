@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>科研人员在线学习数据 - 时间行为分析</title>
+    <link rel="icon" type="image/png" href="../../favicon.png">
+    <script src="../../lib/d3.v7.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #e3f2fd;
+        }
+        
+        .navbar {
+            background-color: #0288d1;
+            padding: 20px 40px;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 16px;
+        }
+        
+        .navbar>div:first-child {
+            font-size: 20px;
+            font-weight: bold;
+        }
+        
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 16px;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background-color 0.2s;
+        }
+        
+        .navbar a:hover {
+            text-decoration: none;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .navbar a.active {
+            background-color: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            font-weight: bold;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+        
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .kpi-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: transform 0.2s;
+        }
+        
+        .kpi-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .kpi-value {
+            font-size: 28px;
+            font-weight: bold;
+            color: #0288d1;
+            margin: 10px 0;
+        }
+        
+        .kpi-label {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .kpi-description {
+            font-size: 12px;
+            color: #888;
+            margin-top: 8px;
+            line-height: 1.4;
+            padding: 0 10px;
+        }
+        
+        .chart-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        
+        .chart-title {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .chart-row {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .chart-col {
+            flex: 1;
+        }
+        
+        .tooltip {
+            position: absolute;
+            padding: 8px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            border-radius: 4px;
+            font-size: 12px;
+            pointer-events: none;
+        }
+        
+        .axis-label {
+            font-size: 12px;
+            fill: #666;
+        }
+        
+        .bar {
+            fill: #0288d1;
+            transition: fill 0.3s;
+        }
+        
+        .bar:hover {
+            fill: #026aa7;
+        }
+        
+        .line {
+            fill: none;
+            stroke: #ff9800;
+            stroke-width: 2;
+        }
+        
+        .line-point {
+            fill: #ff9800;
+            stroke: white;
+            stroke-width: 2;
+            r: 4;
+        }
+        
+        .line-point:hover {
+            r: 6;
+        }
+        
+        .trend-line {
+            fill: none;
+            stroke: #f44336;
+            stroke-width: 2;
+            stroke-dasharray: 5, 5;
+        }
+
+        
+        .calendar-heatmap {
+            font-family: Arial, sans-serif;
+        }
+        
+        .calendar-day {
+            stroke: #fff;
+            stroke-width: 1px;
+        }
+        
+        .calendar-month-label {
+            font-size: 12px;
+            fill: #666;
+        }
+        
+        .calendar-day-label {
+            font-size: 10px;
+            fill: #666;
+        }
+        
+        .calendar-legend {
+            font-size: 10px;
+            fill: #666;
+        }
+        
+        .chart-description {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 15px;
+            line-height: 1.5;
+            text-align: left;
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 6px;
+            border-left: 4px solid #0288d1;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="navbar">
+        <div><a href="../../index.html" style="text-decoration: none; color: white;font-size: 20px;font-weight: bold;">首   页</a></div>
+        <div>
+            <a href="../dashboard/dashboard.html">数据总览</a>
+            <a href="../demographic/demographic.html">人口统计分析</a>
+            <a href="../course/course.html">课程分析</a>
+            <a href="../time/time.html">时间行为分析</a>
+            <a href="../quality/quality.html">质量与效率分析</a>
+            <a href="../clustering/clustering.html">聚类分析</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="kpi-grid">
+            <div class="kpi-card">
+                <div class="kpi-value" id="time-concentration">-</div>
+                <div class="kpi-label">科研人员学习时间集中度均值</div>
+                <div class="kpi-description">反映科研人员学习时间的集中程度，数值越高表示学习时间越规律、集中</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-value" id="rhythm-stability">-</div>
+                <div class="kpi-label">科研人员学习时间变化幅度</div>
+                <div class="kpi-description">反映科研人员学习时间的稳定性，数值越小表示学习节奏越稳定</div>
+            </div>
+        </div>
+
+        <div class="chart-row">
+            <div class="chart-col">
+                <div class="chart-container">
+                    <div class="chart-title">日活学习人数趋势</div>
+                    <div class="chart-description">
+                        展示科研人员每日学习活跃人数的时间趋势。蓝色实线为每日实际学习人数，橙色实线为月平均趋势线。
+                        帮助分析学习活动的周期性变化和整体趋势，识别学习高峰和低谷期。
+                    </div>
+                    <svg id="line-chart" width="100%" height="500"></svg>
+                </div>
+            </div>
+        </div>
+
+        <div class="chart-container">
+            <div class="chart-title">学习活动日历热力图</div>
+            <div class="chart-description">
+                以日历形式展示全年每一天的学习活跃度。颜色深度代表当日学习人数的多少，
+                可以直观识别学习活动的季节性规律、节假日影响和重要时间节点。
+            </div>
+            <div id="calendar-heatmap"></div>
+        </div>
+
+        <div class="chart-row">
+            <div class="chart-col">
+                <div class="chart-container">
+                    <div class="chart-title">按小时学习分布</div>
+                    <div class="chart-description">
+                        展示科研人员在24小时内不同时段的学习人数分布。
+                        帮助了解科研人员的学习时间偏好，为优化学习资源配置和系统维护提供依据。
+                    </div>
+                    <svg id="hour-bar-chart" width="100%" height="400"></svg>
+                </div>
+            </div>
+            <div class="chart-col">
+                <div class="chart-container">
+                    <div class="chart-title">按星期学习分布</div>
+                    <div class="chart-description">
+                        展示科研人员在一周七天中的学习人数分布情况。
+                        反映工作日与周末的学习模式差异，有助于理解科研人员的学习节奏安排。
+                    </div>
+                    <svg id="weekday-bar-chart" width="100%" height="400"></svg>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="time.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 设置当前页面导航高亮
+            const navLinks = document.querySelectorAll('.navbar a');
+            navLinks.forEach(link => {
+                const linkHref = link.getAttribute('href');
+                if (linkHref && linkHref.includes('time.html')) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

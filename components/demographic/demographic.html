@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>科研人员在线学习数据 - 人口统计分析</title>
+    <link rel="icon" type="image/png" href="../../favicon.png">
+    <script src="../../lib/d3.v7.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #e3f2fd;
+        }
+        
+        .navbar {
+            background-color: #0288d1;
+            padding: 20px 40px;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 16px;
+        }
+        
+        .navbar>div:first-child {
+            font-size: 20px;
+            font-weight: bold;
+        }
+        
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 16px;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background-color 0.2s;
+        }
+        
+        .navbar a:hover {
+            text-decoration: none;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        /* 当前页面导航高亮样式 */
+        
+        .navbar a.active {
+            background-color: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            font-weight: bold;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+        
+        .dimension-controls {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .dimension-btn {
+            background: #e0e0e0;
+            border: none;
+            padding: 10px 20px;
+            margin: 0 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .dimension-btn.active {
+            background: #0288d1;
+            color: white;
+        }
+        
+        .dimension-btn:hover {
+            background: #0288d1;
+            color: white;
+        }
+        
+        .chart-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            overflow: visible;
+            /* 允许内容溢出，防止雷达图被裁剪 */
+        }
+        
+        .chart-title {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .chart-row {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .chart-col {
+            flex: 1;
+        }
+        
+        .tooltip {
+            position: absolute;
+            padding: 8px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            border-radius: 4px;
+            font-size: 12px;
+            pointer-events: none;
+        }
+        
+        .legend {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 10px;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .legend-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 2px;
+        }
+        
+        .axis-label {
+            font-size: 12px;
+            fill: #666;
+        }
+        
+        .chart-description {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 15px;
+            line-height: 1.5;
+            text-align: left;
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 6px;
+            border-left: 4px solid #0288d1;
+        }
+        
+        .bar {
+            fill: #0288d1;
+            transition: fill 0.3s;
+        }
+        
+        .bar:hover {
+            fill: #026aa7;
+        }
+        /* 雷达图样式 */
+        
+        .radar-chart {
+            overflow: visible;
+        }
+        
+        .axis-label-radar {
+            font-size: 11px;
+            fill: #666;
+            text-anchor: middle;
+        }
+        
+        .radar-line {
+            fill: none;
+            stroke-width: 2;
+            opacity: 0.7;
+        }
+        
+        .radar-area {
+            opacity: 0.3;
+        }
+        
+        .radar-dots {
+            fill: white;
+            stroke-width: 2;
+            r: 3;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="navbar">
+        <div><a href="../../index.html" style="text-decoration: none; color: white;font-size: 20px;font-weight: bold;">首   页</a></div>
+        <div>
+            <a href="../dashboard/dashboard.html">数据总览</a>
+            <a href="../demographic/demographic.html">人口统计分析</a>
+            <a href="../course/course.html">课程分析</a>
+            <a href="../time/time.html">时间行为分析</a>
+            <a href="../quality/quality.html">质量与效率分析</a>
+            <a href="../clustering/clustering.html">聚类分析</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="dimension-controls">
+            <h3>选择分析维度</h3>
+            <button class="dimension-btn active" data-dimension="gender">性别分析</button>
+            <button class="dimension-btn" data-dimension="age">年龄分析</button>
+            <button class="dimension-btn" data-dimension="rank">职级分析</button>
+        </div>
+
+        <div class="chart-container">
+            <div class="chart-title">学习人群组成分析</div>
+            <div class="chart-description">
+                该图表展示不同维度（性别、年龄、职级）下科研人员的学习参与情况。
+                蓝色部分代表实际学习人数，橙色部分代表选课但未学习人数，帮助分析各群体的学习执行力差异。
+            </div>
+            <svg id="stacked-bar-chart" width="100%" height="400"></svg>
+        </div>
+
+        <div class="chart-row">
+            <div class="chart-col">
+                <div class="chart-container">
+                    <div class="chart-title">学习质量指标对比</div>
+                    <div class="chart-description">
+                        对比不同群体的学习质量指标：人均学习课程数和人均学习时长。
+                        反映各群体的学习强度和投入程度，识别学习最积极的群体特征。
+                    </div>
+                    <svg id="quality-metrics-chart" width="100%" height="350"></svg>
+                </div>
+            </div>
+            <div class="chart-col">
+                <div class="chart-container">
+                    <div class="chart-title">学习数量指标对比</div>
+                    <div class="chart-description">
+                        展示不同群体在学习数量方面的表现：学习参与率、平均完成度和课程覆盖度。
+                        帮助识别哪些群体表现更优秀，为精准培训提供依据。
+                    </div>
+                    <svg id="quantity-metrics-chart" width="100%" height="350"></svg>
+                </div>
+            </div>
+        </div>
+
+        <div class="chart-row">
+            <div class="chart-col">
+                <div class="chart-container">
+                    <div class="chart-title">总选课人数分布</div>
+                    <div class="chart-description">
+                        饼图展示当前选定维度下各群体的总选课人数占比分布。
+                        通过占比大小可以直观了解不同群体的参与规模，识别主要和次要用户群体。
+                    </div>
+                    <svg id="pie-chart" width="100%" height="400"></svg>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="demographic.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 设置当前页面导航高亮
+            const navLinks = document.querySelectorAll('.navbar a');
+            navLinks.forEach(link => {
+                const linkHref = link.getAttribute('href');
+                if (linkHref && linkHref.includes('demographic.html')) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

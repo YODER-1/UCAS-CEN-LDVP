@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>中国科学院科研人员在线学习数据可视化平台</title>
+    <link rel="icon" type="image/png" href="favicon.png">
+    <script src="lib/d3.v7.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #e3f2fd;
+        }
+        
+        .navbar {
+            background-color: #0288d1;
+            padding: 20px 40px;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 16px;
+        }
+        
+        .navbar>div:first-child {
+            font-size: 20px;
+            font-weight: bold;
+        }
+        
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 16px;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background-color 0.2s;
+        }
+        
+        .navbar a:hover {
+            text-decoration: none;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .navbar a.active {
+            background-color: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            font-weight: bold;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+        
+        .welcome-section {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .welcome-section h1 {
+            color: #0288d1;
+            margin-bottom: 20px;
+        }
+        
+        .welcome-section p {
+            color: #666;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+        
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .menu-card {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: transform 0.2s;
+        }
+        
+        .menu-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .menu-card1 {
+            background: #e3f2fd;
+        }
+        
+        .menu-icon {
+            font-size: 36px;
+            color: #0288d1;
+            margin-bottom: 15px;
+        }
+        
+        .menu-title {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        
+        .menu-desc {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+        
+        .menu-link {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #0288d1;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background-color 0.2s;
+        }
+        
+        .menu-link:hover {
+            background-color: #026aa7;
+        }
+        
+        .hero {
+            background: linear-gradient(135deg, #0288d1 0%, #01579b 100%);
+            color: white;
+            padding: 40px 0;
+            text-align: center;
+        }
+        
+        .hero h1 {
+            font-size: 36px;
+            margin: 0 0 20px 0;
+        }
+        
+        .hero p {
+            font-size: 18px;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .features {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+        
+        .features-title {
+            text-align: center;
+            font-size: 28px;
+            color: #333;
+            margin-bottom: 40px;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+        }
+        
+        .feature-card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .feature-title {
+            font-size: 20px;
+            color: #0288d1;
+            margin: 20px 0 15px 0;
+            font-weight: bold;
+        }
+        
+        .feature-description {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        
+        .feature-link {
+            display: inline-block;
+            background: #0288d1;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 6px;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+        
+        .feature-link:hover {
+            background: #026aa7;
+            text-decoration: none;
+        }
+        
+        .footer {
+            background: #333;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 60px;
+        }
+        /* 动画效果 */
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .feature-card {
+            animation: fadeInUp 0.6s ease-out;
+        }
+        
+        .feature-card:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+        
+        .feature-card:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        
+        .feature-card:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+        
+        .feature-card:nth-child(4) {
+            animation-delay: 0.4s;
+        }
+        
+        .feature-card:nth-child(5) {
+            animation-delay: 0.5s;
+        }
+        
+        .feature-card:nth-child(6) {
+            animation-delay: 0.6s;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="navbar">
+        <div><a href="index.html" style="text-decoration: none; color: white;font-size: 20px;font-weight: bold;">首   页</a></div>
+        <div>
+            <a href="components/dashboard/dashboard.html">数据总览</a>
+            <a href="components/demographic/demographic.html">人口统计分析</a>
+            <a href="components/course/course.html">课程分析</a>
+            <a href="components/time/time.html">时间行为分析</a>
+            <a href="components/quality/quality.html">质量与效率分析</a>
+            <a href="components/clustering/clustering.html">聚类分析</a>
+        </div>
+    </div>
+
+    <div class="hero">
+        <h1>科研人员在线学习数据分析</h1>
+        <p>基于2018年中国科学院科研人员在线学习数据的分析与可视化展示，帮助理解学习行为模式和优化教育策略</p>
+    </div>
+
+    <div class="features">
+        <h2 class="features-title">分析模块</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-title">数据总览</div>
+                <div class="feature-description">查看关键指标概览，包括学习人员数量、学习时长等核心数据统计</div>
+                <a href="components/dashboard/dashboard.html" class="feature-link">查看总览</a>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-title">人口统计分析</div>
+                <div class="feature-description">深入了解科研人员群体特征，包括年龄分布、职称结构等维度分析</div>
+                <a href="components/demographic/demographic.html" class="feature-link">查看分析</a>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-title">课程分析</div>
+                <div class="feature-description">分析课程选择偏好、完成情况及评价反馈等多维度数据</div>
+                <a href="components/course/course.html" class="feature-link">查看分析</a>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-title">时间行为分析</div>
+                <div class="feature-description">探索学习时间分布规律，掌握科研人员学习行为特征</div>
+                <a href="components/time/time.html" class="feature-link">查看分析</a>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-title">质量与效率分析</div>
+                <div class="feature-description">评估学习质量和效率，发现优化机会和改进方向</div>
+                <a href="components/quality/quality.html" class="feature-link">查看分析</a>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-title">聚类分析</div>
+                <div class="feature-description">基于学习行为对用户进行聚类分析，识别不同的学习者类型和行为模式</div>
+                <a href="components/clustering/clustering.html" class="feature-link">查看分析</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>&copy; 2024 中国科学院科研人员在线学习数据分析平台. 数据来源：2018年中国科学院科研人员在线学习数据集</p>
+    </div>
+</body>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+
+        const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+        const navLinks = document.querySelectorAll('.navbar a');
+
+        navLinks.forEach(link => {
+            const linkPage = link.getAttribute('href');
+            if ((currentPage === 'index.html' || currentPage === '') &&
+                (linkPage === 'index.html' || link.textContent.trim() === '首   页')) {
+                link.classList.add('active');
+            } else if (linkPage === currentPage) {
+                link.classList.add('active');
+            }
+        });
+    });
+</script>
+
+</html>
